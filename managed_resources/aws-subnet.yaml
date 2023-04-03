@@ -1,0 +1,13 @@
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: Subnet
+metadata:
+  name: sample-db-subnet2
+spec:
+  forProvider:
+    availabilityZone: us-east-1a
+    cidrBlock: 172.16.20.0/24
+    region: us-east-1
+    tags:
+      Name: sample-db-subnet2
+    vpcIdRef:
+      name: sample-vpc
