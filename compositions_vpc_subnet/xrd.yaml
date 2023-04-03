@@ -1,0 +1,45 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xvpcsubnets.custom-api.example.org
+spec:
+  group: custom-api.example.org
+  names:
+    kind: XVpcsubnet
+    plural: xvpcsubnets
+  versions:
+  - name: v1alpha1
+    served: true
+    referenceable: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              region:
+                type: string
+                oneOf:
+                  - pattern: '^EU$'
+                  - pattern: '^US$'
+              parameters:
+                type: object
+                properties:
+                  vpc-cidr:
+                    description: The cidr value of vpc
+                    type: string
+                    default: 172.16.0.0/16
+                  dbsubnet-cidr:
+                    description: The cidr value of dbsubnet
+                    type: string
+                  websubnet-cidr:
+                    description: The cidr value of websubnet
+                    type: string
+                required:
+                - vpc-cidr
+            required:
+              - region
+  claimNames:
+    kind: Vpcsubnet
+    plural: vpcsubnets

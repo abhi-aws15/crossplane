@@ -1,0 +1,88 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: vpc-with-subnet
+spec:
+  compositeTypeRef:
+    apiVersion: custom-api.example.org/v1alpha1
+    kind: XVpcsubnet
+  resources:
+    - name: vpc
+      base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: VPC
+        metadata:
+          annotations:
+            meta.upbound.io/example-id: directconnect/v1beta1/gatewayassociationproposal
+          labels:
+            testing.upbound.io/example-name: main
+          name: sample-vpc
+        spec:
+          forProvider:
+            cidrBlock: 172.16.0.0/16
+            region: us-east-1
+            tags:
+              Name: DemoVpc
+      patches:
+      - fromFieldPath: spec.parameters.vpc-cidr
+        toFieldPath: spec.forProvider.cidrBlock
+      - fromFieldPath: "spec.region"
+        toFieldPath: "spec.forProvider.region"
+        transforms:
+            - type: map
+              map: 
+                EU: "eu-north-1"
+                US: "us-east-1"
+
+    - name: db-subnet
+      base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: Subnet
+        metadata:
+          name: sample-db-subnet
+        spec:
+          forProvider:
+            availabilityZone: us-east-1a
+            cidrBlock: 172.16.20.0/24
+            region: us-east-1
+            tags:
+              Name: sample-db-subnet
+            vpcIdSelector:
+              matchLabels:
+                testing.upbound.io/example-name: main
+      patches:
+      - fromFieldPath: spec.parameters.dbsubnet-cidr
+        toFieldPath: spec.forProvider.cidrBlock
+      - fromFieldPath: "spec.region"
+        toFieldPath: "spec.forProvider.region"
+        transforms:
+            - type: map
+              map: 
+                EU: "eu-north-1"
+                US: "us-east-1"
+    - name: web-subnet
+      base:
+        apiVersion: ec2.aws.upbound.io/v1beta1
+        kind: Subnet
+        metadata:
+          name: sample-web-subnet
+        spec:
+          forProvider:
+            availabilityZone: us-east-1b
+            cidrBlock: 172.16.30.0/24
+            region: us-east-1
+            tags:
+              Name: sample-web-subnet
+            vpcIdSelector:
+              matchLabels:
+                testing.upbound.io/example-name: main
+      patches:
+      - fromFieldPath: spec.parameters.websubnet-cidr
+        toFieldPath: spec.forProvider.cidrBlock
+      - fromFieldPath: "spec.region"
+        toFieldPath: "spec.forProvider.region"
+        transforms:
+            - type: map
+              map: 
+                EU: "eu-north-1"
+                US: "us-east-1"
