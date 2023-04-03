@@ -1,0 +1,14 @@
+apiVersion: custom-api.example.org/v1alpha1
+kind: XVpcsubnet
+metadata:
+  name: my-composite-resource-vpcsubnet
+spec: 
+  compositionRef:
+    # Possible name of the composition, if there are multiple compositions
+    name: vpc-with-subnet
+  region: "US"
+  parameters:
+    # Default values vpc: 172.16.0.0/16 , dbsubnet:  172.16.20.0/24, websubnet: 172.16.30.0/24
+    vpc-cidr: 172.17.0.0/16
+    dbsubnet-cidr: 172.17.10.0/24
+    websubnet-cidr: 172.17.20.0/24
