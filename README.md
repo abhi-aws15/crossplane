@@ -7,7 +7,7 @@
 
 
 ## How to install crossplane and setup provider
-1. We will use `up` to install `Upbound Universal Crossplane(UXP` you can use helm as well
+1. We will use `up` to install `Upbound Universal Crossplane(UXP)` you can use helm as well
     ```shell
     curl -sL "https://cli.upbound.io" | sh
     sudo mv up /usr/local/bin/
